@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}
+ Transaction
+{% endblock %}
+
+{% block main %}
+<table class = "table">
+        <thead>
+            <tr>
+
+            <th scope = "col">Time Stamp</th>
+            <th scope = "col">Stock</th>
+            <th scope = "col">Company Name</th>
+            <th scope = "col">Shares Traded</th>
+            <th scope = "col">Price</th>
+            <th scope = "col">Transaction Value</th>
+            <th scope = "col">Transaction Type</th>
+
+
+            </tr>
+        </thead>
+
+        <tbody>
+
+        {% for row in rows %}
+
+        <tr>
+
+        <td>{{row["timestamp"]}}</td>
+        <td>{{row["symbol"]}}</td>
+        <td>{{row["company"]}}</td>
+        <td>{{row["quantity"]}}</td>
+        <td>{{row["price"]}}</td>
+        <td>{{row["tranvalue"]}}</td>
+        <td>{{row["type"]}}</td>
+
+
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+
+{% endblock %}

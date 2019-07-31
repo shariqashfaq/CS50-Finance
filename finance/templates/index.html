@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    PORTFOLIO
+{% endblock %}
+
+{% block main %}
+<table class = "table">
+        <thead>
+            <tr>
+
+            <th scope = "col">Stock</th>
+            <th scope = "col">Shares Held</th>
+            <th scope = "col">Current Value</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+
+        {% for row in rows %}
+
+        <tr>
+
+        <td>{{row["symbol"]}}</td>
+        <td>{{row["SUM(quantity)"]}}</td>
+        <td>{{row["value"]}}</td>
+
+        </tr>
+
+        {% endfor %}
+        <tr>
+            <td colspan="2">Total Stock Value</td>
+            <td>{{total_stock_value}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">Available Funds</td>
+            <td>{{cash}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">Portfolio Value</td>
+            <td>{{portfolio}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+
+{% endblock %}
+
+
+
+
