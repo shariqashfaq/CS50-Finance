@@ -12,6 +12,7 @@
             <th scope = "col">Stock</th>
             <th scope = "col">Shares Held</th>
             <th scope = "col">Current Value</th>
+            <th scope = "col">Current Price</th>
 
             </tr>
         </thead>
@@ -25,25 +26,39 @@
         <td>{{row["symbol"]}}</td>
         <td>{{row["SUM(quantity)"]}}</td>
         <td>{{row["value"]}}</td>
+        <td>{{row["price"]}}</td>
+
+
+
+        <td><input type="number" name="buy_shares"> <button class="btn btn-primary" type="submit" id="buybutton" value="{{row["symbol"]}}">Buy</button></td>
+        <td><input type="number" name="sell_shares"> <button class="btn btn-primary" type="submit" value="{{row["symbol"]}}">Sell</button></td>
 
         </tr>
 
         {% endfor %}
+
         <tr>
-            <td colspan="2">Total Stock Value</td>
+            <td colspan="3">Total Stock Value</td>
             <td>{{total_stock_value}}</td>
         </tr>
         <tr>
-            <td colspan="2">Available Funds</td>
+            <td colspan="3">Available Funds</td>
             <td>{{cash}}</td>
         </tr>
         <tr>
-            <td colspan="2">Portfolio Value</td>
+            <td colspan="3">Portfolio Value</td>
             <td>{{portfolio}}</td>
         </tr>
         </tbody>
     </table>
 
+    <script>
+
+        document.querySelector('#buybutton').onclick = function(){
+            $.post('/buy', {num_shares : $('input[name="buy_shares"]').val() , stk_symbol : $('button[name="buybutton"]').val()});
+        };
+
+    </script>
 
 {% endblock %}
 
