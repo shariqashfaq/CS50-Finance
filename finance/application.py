@@ -94,21 +94,21 @@ def buy():
     else:
 
         #Check if stock symbol and quantity fields are filled
-        if not request.form.get("stk_symbol"):
+        if not request.form.get("stksymbol"):
             return apology("must provide stock symbol", 403)
 
-        elif not request.form.get("num_shares"):
+        elif not request.form.get("numshares"):
             return apology("must provide quantity", 403)
 
         #Check to see if user has enough funds
-        elif rows[0]["cash"] < float(lookup(request.form.get("stk_symbol"))["price"])*float(request.form.get("num_shares")):
+        elif rows[0]["cash"] < float(lookup(request.form.get("stksymbol"))["price"])*float(request.form.get("numshares")):
             return apology("ride slow homie", 403)
 
         #Enter into transactions database
         else:
             trans_id = db.execute("INSERT INTO transactions (id, type, symbol, company, price, quantity, tranvalue) VALUES (:id, :type, :symbol, :company, :price, :quantity, :tranvalue)",
-                        id = session["user_id"] ,type = "buy", symbol = lookup(request.form.get("stk_symbol"))["symbol"], company = lookup(request.form.get("stk_symbol"))["name"],
-                        price = lookup(request.form.get("stk_symbol"))["price"], quantity = request.form.get("num_shares"), tranvalue = float(lookup(request.form.get("stk_symbol"))["price"])*float(request.form.get("num_shares")))
+                        id = session["user_id"] ,type = "buy", symbol = lookup(request.form.get("stksymbol"))["symbol"], company = lookup(request.form.get("stksymbol"))["name"],
+                        price = lookup(request.form.get("stksymbol"))["price"], quantity = request.form.get("numshares"), tranvalue = float(lookup(request.form.get("stksymbol"))["price"])*float(request.form.get("numshares")))
 
             #update cash
             tran_rows = db.execute("SELECT * FROM transactions WHERE transid= :transid", transid = trans_id)
@@ -252,7 +252,7 @@ def sell():
     rows = db.execute("SELECT * FROM users WHERE id = :id",
                           id = session["user_id"])
 
-    rows1 = db.execute("SELECT symbol, SUM(quantity) FROM transactions WHERE id= :id AND symbol= :symbol GROUP BY symbol", id = session["user_id"], symbol=request.form.get("symbol"))
+    rows1 = db.execute("SELECT symbol, SUM(quantity) FROM transactions WHERE id= :id AND symbol= :symbol GROUP BY symbol", id = session["user_id"], symbol=request.form.get("stksymbol"))
 
 
     if request.method == "GET":
@@ -265,28 +265,28 @@ def sell():
     else:
 
         #Check if stock symbol and quantity fields are filled
-        if not request.form.get("symbol"):
+        if not request.form.get("stksymbol"):
             return apology("must provide stock symbol", 403)
 
-        elif not request.form.get("shares"):
+        elif not request.form.get("numshares"):
             return apology("must provide quantity", 403)
 
         #Check to see if user has enough shares
-        elif float(rows1[0]["SUM(quantity)"]) < float(request.form.get("shares")):
+        elif float(rows1[0]["SUM(quantity)"]) < float(request.form.get("numshares")):
             return apology("you aint got nuff shares homes", 403)
 
         #Enter into transactions database
         else:
             trans_id = db.execute("INSERT INTO transactions (id, type, symbol, company, price, quantity, tranvalue) VALUES (:id, :type, :symbol, :company, :price, :quantity, :tranvalue)",
-                        id = session["user_id"] ,type = "sell", symbol = lookup(request.form.get("symbol"))["symbol"], company = lookup(request.form.get("symbol"))["name"],
-                        price = lookup(request.form.get("symbol"))["price"], quantity = float(request.form.get("shares"))*(-1), tranvalue = float(lookup(request.form.get("symbol"))["price"])*float(request.form.get("shares")))
+                        id = session["user_id"] ,type = "sell", symbol = lookup(request.form.get("stksymbol"))["symbol"], company = lookup(request.form.get("stksymbol"))["name"],
+                        price = lookup(request.form.get("stksymbol"))["price"], quantity = float(request.form.get("numshares"))*(-1), tranvalue = float(lookup(request.form.get("stksymbol"))["price"])*float(request.form.get("numshares")))
 
             #update cash
             tran_rows = db.execute("SELECT * FROM transactions WHERE transid= :transid", transid = trans_id)
             newcash = rows[0]["cash"] + tran_rows[0]["tranvalue"]
             db.execute("UPDATE users SET cash = :newcash  WHERE id= :id", newcash = newcash, id = session["user_id"])
 
-            return render_template("transaction.html")
+            return redirect("/history" )
 
 
 

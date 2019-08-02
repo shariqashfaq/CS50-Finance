@@ -30,8 +30,19 @@
 
 
 
-        <td><input type="number" name="buy_shares"> <button class="btn btn-primary" type="submit" id="buybutton" value="{{row["symbol"]}}">Buy</button></td>
-        <td><input type="number" name="sell_shares"> <button class="btn btn-primary" type="submit" value="{{row["symbol"]}}">Sell</button></td>
+        <td>
+            <form action="/buy" method="post">
+                <input type="number" name="numshares">
+                <button class="btn btn-primary" type="submit" name="stksymbol" value="{{row["symbol"]}}">Buy</button>
+            </form>
+        </td>
+
+        <td>
+           <form action="/sell" method="post">
+                <input type="number" name="numshares">
+                <button class="btn btn-primary" type="submit" name="stksymbol" value="{{row["symbol"]}}">Sell</button>
+            </form>
+        </td>
 
         </tr>
 
@@ -52,13 +63,13 @@
         </tbody>
     </table>
 
-    <script>
+    <!--<script>
 
         document.querySelector('#buybutton').onclick = function(){
-            $.post('/buy', {num_shares : $('input[name="buy_shares"]').val() , stk_symbol : $('button[name="buybutton"]').val()});
+            $.post('/buy', {numshares : $('input[name="buy_shares"]').val() , stksymbol : $('button[name="buybutton"]').val()});
         };
 
-    </script>
+    </script>-->
 
 {% endblock %}
 
